@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <context:component-scan base-package="in.rishikeshdarandale.rest.*" />
+  <bean id="cartService" class="in.rishikeshdarandale.rest.services.impl.CartServiceImpl" />
+  <!-- Redis Connection Factory -->
+  <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+        p:use-pool="true" p:host-name="localhost" p:port="6379" p:password=""/>
+  <!-- Redis Template -->
+  <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+        p:connection-factory-ref="jedisConnFactory">
+    <property name="keySerializer">
+      <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+    </property>
+    <property name="valueSerializer">
+      <bean class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer">
+        <constructor-arg type="java.lang.Class" value="in.rishikeshdarandale.rest.model.cart.Cart" />
+      </bean>
+    </property>
+  </bean>
+  <!-- Redis Repository -->
+  <bean id="cartRepository" class="in.rishikeshdarandale.rest.redis.repository.cart.CartRepository">
+    <property name="redisTemplate" ref="redisTemplate"/>
+  </bean>
+</beans>
