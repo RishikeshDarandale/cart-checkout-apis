@@ -31,11 +31,33 @@ public class Cart implements BaseModel {
     private String id;
     public static final Integer MAX_ITEMS = 20;
     public static final String OBJECT_KEY = "CART";
-    private Set<? extends Item> items = new HashSet<Item>();
+    private Set<CartItem> items = new HashSet<CartItem>();
 
     public Cart() {
         super();
         this.setId(UUID.randomUUID().toString());
+    }
+    public Boolean isItemExists(CartItem item) {
+        Boolean exists = Boolean.FALSE;
+        if(this.getItems() != null && !this.getItems().isEmpty()) {
+            exists = this.getItems().contains(item);
+        }
+        return exists;
+    }
+    public void removeItem(CartItem item) {
+        if (isItemExists(item)) {
+            this.getItems().remove(item);
+        }
+    }
+    public Double getCartTotal() {
+        Double total = 0d;
+        for(CartItem t: this.getItems()) {
+            total += t.getItemTotal();
+        }
+        return total;
+    }
+    public Integer getItemCount() {
+        return this.getItems() != null ? this.getItems().size() : 0;
     }
     @Override
     public String getKey() {
@@ -70,17 +92,10 @@ public class Cart implements BaseModel {
     public void setId(String id) {
         this.id = id;
     }
-    public Set<? extends Item> getItems() {
+    public Set<CartItem> getItems() {
         return items;
     }
-    public void setItems(Set<? extends Item> items) {
+    public void setItems(Set<CartItem> items) {
         this.items = items;
-    }
-    public Double getCartTotal() {
-        Double total = 0d;
-        for(Item t: this.getItems()) {
-            total += t.getItemTotal();
-        }
-        return total;
     }
 }

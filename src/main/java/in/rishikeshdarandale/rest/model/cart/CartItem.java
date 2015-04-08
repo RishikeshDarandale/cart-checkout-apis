@@ -17,7 +17,7 @@ package in.rishikeshdarandale.rest.model.cart;
 
 import java.io.Serializable;
 
-public class Item implements Serializable {
+public class CartItem implements Serializable {
 
     /**
      * serial version id
@@ -28,6 +28,10 @@ public class Item implements Serializable {
     private Integer quantity;
     private Double price;
 
+    public CartItem(String skuId) {
+        super();
+        this.skuId = skuId;
+    }
     public Double getItemTotal() {
         return this.quantity * price;
     }
@@ -46,7 +50,7 @@ public class Item implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Item other = (Item) obj;
+        CartItem other = (CartItem) obj;
         if (skuId == null) {
             if (other.skuId != null)
                 return false;

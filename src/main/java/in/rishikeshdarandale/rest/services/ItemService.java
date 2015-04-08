@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package in.rishikeshdarandale.rest.model;
+package in.rishikeshdarandale.rest.services;
 
-import java.io.Serializable;
+import in.rishikeshdarandale.rest.model.cart.CartItem;
 
-public interface BaseModel extends Serializable {
-    String getKey();
+public interface ItemService {
+    Boolean isItemInStock(String skuId);
+    CartItem getItem(String skuId);
 }

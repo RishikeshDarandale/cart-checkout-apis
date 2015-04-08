@@ -18,14 +18,17 @@ package in.rishikeshdarandale.rest.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import in.rishikeshdarandale.rest.model.cart.Cart;
-import in.rishikeshdarandale.rest.model.cart.Item;
+import in.rishikeshdarandale.rest.model.cart.CartItem;
 import in.rishikeshdarandale.rest.redis.repository.cart.CartRepository;
 import in.rishikeshdarandale.rest.services.CartService;
+import in.rishikeshdarandale.rest.services.ItemService;
 
 public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private ItemService itemSerice;
 
     @Override
     public Cart create() {
@@ -37,32 +40,14 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart get(String id) {
-        // TODO Auto-generated method stub
-        return null;
+        Cart cart = null;
+        cart = cartRepository.get(id);
+        return cart;
     }
 
     @Override
-    public Integer delete(String id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Cart addItem(String id, Item item) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Cart updateItem(String id, Item item) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Cart removeItem(String id, Item item) {
-        // TODO Auto-generated method stub
-        return null;
+    public void delete(String id) {
+        cartRepository.delete(id);
     }
 
     public CartRepository getCartRepository() {
@@ -71,5 +56,44 @@ public class CartServiceImpl implements CartService {
 
     public void setCartRepository(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
+    }
+
+    @Override
+    public Cart addItem(String id, CartItem item) {
+        Cart cart = get(id);
+        if (cart != null) {
+            if (cart.getItemCount() < Cart.MAX_ITEMS) {
+                if (itemSerice.isItemInStock((item.getSkuId()))) {
+                    cart.getItems().add(item);
+                    //update in database
+                    cartRepository.put(cart);
+                } else {
+                    //throw ItemOutOfStockException
+                }
+            } else {
+                // throw CartFullException
+            }
+        }
+        return cart;
+    }
+
+    @Override
+    public Cart updateItem(String id, CartItem item) {
+        return cartRepository.exists(id) ? addItem(id, item) : null;
+    }
+
+    @Override
+    public Cart removeItem(String id, CartItem item) {
+        Cart cart = get(id);
+        if (cart != null) {
+            if (cart.isItemExists(item)) {
+                cart.removeItem(item);
+                //update in database
+                cartRepository.put(cart);
+            } else {
+                // throw Item not found
+            }
+        }
+        return cart;
     }
 }

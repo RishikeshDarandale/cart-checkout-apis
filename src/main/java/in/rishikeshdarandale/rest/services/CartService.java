@@ -16,13 +16,13 @@
 package in.rishikeshdarandale.rest.services;
 
 import in.rishikeshdarandale.rest.model.cart.Cart;
-import in.rishikeshdarandale.rest.model.cart.Item;
+import in.rishikeshdarandale.rest.model.cart.CartItem;
 
 public interface CartService {
     Cart create();
     Cart get(String id);
-    Integer delete(String id);
-    Cart addItem(String id, Item item);
-    Cart updateItem(String id, Item item);
-    Cart removeItem(String id, Item item);
+    void delete(String id);
+    Cart addItem(String id, CartItem item);
+    Cart updateItem(String id, CartItem item);
+    Cart removeItem(String id, CartItem item);
 }
