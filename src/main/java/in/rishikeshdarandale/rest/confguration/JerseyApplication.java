@@ -16,7 +16,9 @@
 package in.rishikeshdarandale.rest.confguration;
 
 import org.glassfish.jersey.server.ResourceConfig;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JerseyApplication extends ResourceConfig {
     public JerseyApplication() {
         packages("in.rishikeshdarandale.rest");
