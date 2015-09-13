@@ -20,10 +20,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import in.rishikeshdarandale.rest.model.cart.Cart;
 import in.rishikeshdarandale.rest.redis.repository.Repository;
 
+@Component
 public class CartRepository implements Repository<String, Cart> {
 
     @Autowired

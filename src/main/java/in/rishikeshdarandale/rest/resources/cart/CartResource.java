@@ -34,7 +34,7 @@ import in.rishikeshdarandale.rest.services.CartService;
  * Cart resource
  */
 @Component
-@Path("carts")
+@Path("/carts")
 public class CartResource extends AbstractResource {
 
     @Autowired
@@ -44,6 +44,6 @@ public class CartResource extends AbstractResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response create() {
         String id = cartService.create().getId();
-        return Response.created(URI.create("http://localhost:8080/cart-checkout-apis/rest/carts/" + id)).build();
+        return Response.created(URI.create("http://localhost:8080/carts/" + id)).build();
     }
 }

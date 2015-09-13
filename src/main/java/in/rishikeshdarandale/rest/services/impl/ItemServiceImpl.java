@@ -15,9 +15,12 @@
  */
 package in.rishikeshdarandale.rest.services.impl;
 
+import org.springframework.stereotype.Component;
+
 import in.rishikeshdarandale.rest.model.cart.CartItem;
 import in.rishikeshdarandale.rest.services.ItemService;
 
+@Component
 public class ItemServiceImpl implements ItemService {
 
     @Override
