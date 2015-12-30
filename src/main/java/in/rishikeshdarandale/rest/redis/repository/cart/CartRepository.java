@@ -46,12 +46,12 @@ public class CartRepository implements Repository<String, Cart> {
 
     @Override
     public Cart get(String key) {
-        return (Cart) redisTemplate.opsForValue().get(key);
+        return (Cart) redisTemplate.opsForValue().get(Cart.OBJECT_KEY+":"+key);
     }
 
     @Override
     public void delete(String key) {
-        redisTemplate.opsForValue().getOperations().delete(key);
+        redisTemplate.opsForValue().getOperations().delete(Cart.OBJECT_KEY+":"+key);
     }
 
     @Override

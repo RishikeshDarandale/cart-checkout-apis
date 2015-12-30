@@ -19,8 +19,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import in.rishikeshdarandale.rest.model.BaseModel;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Cart implements BaseModel {
 
     /**

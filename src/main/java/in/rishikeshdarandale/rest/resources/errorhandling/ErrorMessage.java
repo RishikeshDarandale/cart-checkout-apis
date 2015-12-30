@@ -13,15 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package in.rishikeshdarandale.rest.confguration;
+package in.rishikeshdarandale.rest.resources.errorhandling;
 
-import org.glassfish.jersey.server.ResourceConfig;
+public class ErrorMessage {
+    private int status;
+    private String message;
 
-import org.springframework.stereotype.Component;
+    public ErrorMessage() {}
 
-@Component
-public class JerseyApplication extends ResourceConfig {
-    public JerseyApplication() {
-        packages("in.rishikeshdarandale.rest");
+    public ErrorMessage(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

@@ -17,12 +17,16 @@ package in.rishikeshdarandale.rest.services;
 
 import in.rishikeshdarandale.rest.model.cart.Cart;
 import in.rishikeshdarandale.rest.model.cart.CartItem;
+import in.rishikeshdarandale.rest.resources.errorhandling.CartFullException;
+import in.rishikeshdarandale.rest.resources.errorhandling.ItemNotFoundException;
+import in.rishikeshdarandale.rest.resources.errorhandling.ItemOutOfStockException;
 
 public interface CartService {
     Cart create();
     Cart get(String id);
     void delete(String id);
-    Cart addItem(String id, CartItem item);
-    Cart updateItem(String id, CartItem item);
-    Cart removeItem(String id, CartItem item);
+    Cart addItem(String id, CartItem item) throws ItemOutOfStockException, CartFullException;
+    boolean exists(String id, String skuId);
+    Cart updateItem(String id, CartItem item) throws ItemOutOfStockException, CartFullException;
+    Cart removeItem(String id, CartItem item) throws ItemNotFoundException;
 }

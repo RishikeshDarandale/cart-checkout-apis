@@ -17,6 +17,9 @@ package in.rishikeshdarandale.rest.model.cart;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CartItem implements Serializable {
 
     /**
@@ -28,13 +31,17 @@ public class CartItem implements Serializable {
     private Integer quantity;
     private Double price;
 
+    public CartItem() {}
+
     public CartItem(String skuId) {
         super();
         this.skuId = skuId;
     }
+
     public Double getItemTotal() {
         return this.quantity * price;
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -42,6 +49,7 @@ public class CartItem implements Serializable {
         result = prime * result + ((skuId == null) ? 0 : skuId.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -58,6 +66,7 @@ public class CartItem implements Serializable {
             return false;
         return true;
     }
+
     public String getSkuId() {
         return skuId;
     }

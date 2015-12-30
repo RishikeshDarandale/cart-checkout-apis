@@ -21,6 +21,9 @@ import org.springframework.stereotype.Component;
 import in.rishikeshdarandale.rest.model.cart.Cart;
 import in.rishikeshdarandale.rest.model.cart.CartItem;
 import in.rishikeshdarandale.rest.redis.repository.cart.CartRepository;
+import in.rishikeshdarandale.rest.resources.errorhandling.CartFullException;
+import in.rishikeshdarandale.rest.resources.errorhandling.ItemNotFoundException;
+import in.rishikeshdarandale.rest.resources.errorhandling.ItemOutOfStockException;
 import in.rishikeshdarandale.rest.services.CartService;
 import in.rishikeshdarandale.rest.services.ItemService;
 
@@ -61,31 +64,45 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart addItem(String id, CartItem item) {
+    public Cart addItem(String id, CartItem item) throws ItemOutOfStockException, CartFullException {
         Cart cart = get(id);
         if (cart != null) {
             if (cart.getItemCount() < Cart.MAX_ITEMS) {
                 if (itemSerice.isItemInStock((item.getSkuId()))) {
+                    if (cart.getItems().contains(item)) {
+                        cart.getItems().remove(item);
+                    }
                     cart.getItems().add(item);
                     //update in database
                     cartRepository.put(cart);
                 } else {
-                    //throw ItemOutOfStockException
+                    throw new ItemOutOfStockException("Currebtly item " + item.getSkuId() + " is out of stock");
                 }
             } else {
-                // throw CartFullException
+                throw new CartFullException("Cart " + cart.getId() + " is full");
             }
         }
         return cart;
     }
 
     @Override
-    public Cart updateItem(String id, CartItem item) {
+    public boolean exists(String id, String skuId) {
+        boolean exists = false;
+        Cart cart = get(id);
+        if (cart != null) {
+            CartItem item = new CartItem(skuId);
+            return cart.isItemExists(item);
+        }
+        return exists;
+    }
+
+    @Override
+    public Cart updateItem(String id, CartItem item) throws ItemOutOfStockException, CartFullException{
         return cartRepository.exists(id) ? addItem(id, item) : null;
     }
 
     @Override
-    public Cart removeItem(String id, CartItem item) {
+    public Cart removeItem(String id, CartItem item) throws ItemNotFoundException {
         Cart cart = get(id);
         if (cart != null) {
             if (cart.isItemExists(item)) {
@@ -93,7 +110,7 @@ public class CartServiceImpl implements CartService {
                 //update in database
                 cartRepository.put(cart);
             } else {
-                // throw Item not found
+                throw new ItemNotFoundException("Item " + item.getSkuId() + " not found");
             }
         }
         return cart;
